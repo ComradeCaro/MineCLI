@@ -6,7 +6,7 @@ function install_dependencies() {
 }
 
 function setup() {
-   # Checks if all dependencies are installed. TODO
+   # Checks if all dependencies are installed
    echo "Checking dependencies..."
    dependencies_installed=false
    
@@ -22,10 +22,10 @@ function setup() {
            if [[ "$continue_without_dependencies" != "y" && "$continue_without_dependencies" != "Y" ]]; then
                echo "Exiting"
                exit 0
-           fi
+       fi
        else
-           echo "Invalid input. Exiting"
-           exit 1
+               echo "Invalid input. Exiting"
+               exit 1
        fi
    fi
    
@@ -34,10 +34,10 @@ function setup() {
    if [[ "$base_location" == "" ]]; then
        base_location="/opt"
    fi
-   cd "$base_location"
+   cd "$base_location" || echo "Error! Exiting" && exit 1
    install_location="$base_location/minecli"
    
-   mkdir -p "minecli" || { echo "This requires sudo permissions."; sudo mkdir -p "minecli" && echo "Successfully created directory in $base_location"; }
+   mkdir -p "minecli" && echo "Successfully created directory in $base_location" || { echo "This requires sudo permissions."; sudo mkdir -p "minecli" && echo "Successfully created directory in $base_location" || echo "Error! Exiting" && exit 1 ; }
 
    
    # Install script
@@ -49,6 +49,16 @@ function setup() {
    echo "MineCLI path is set to $install_location"
    echo "Please reopen your terminal session or do: source $HOME/.bashrc to update the path"
 }
+
+# Checks if the program is already installed
+if [[ true == false ]]; then
+    read -p "This program is already installed. Would you like to continue? [y/N] " continue_if_already_installed
+     if [[ "$continue_if_already_installed" != "y" && "$continue_if_already_installed" != "Y" ]]; then
+         true
+     else
+         exit 0
+     fi
+fi
 
 # START: Asks if the user wants to continue setup
 read -p "MineCLI is a command-line utility for creating and managing Minecraft servers. Would you like to proceed to setup? [Y/n] " continue_setup
