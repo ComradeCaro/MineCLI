@@ -1,0 +1,48 @@
+fun create() {
+    let name = $gum input --prompt="What do you want the server name to be? "$?
+    
+
+}
+
+fun delete() {
+    let server_to_be_removed = $gum choose "a" "b" "c"$?
+    let confirmation = $gum confirm "Sure you want to delete '{server_to_be_removed}'?"$?
+}
+
+fun manage() {
+
+}
+
+fun check_dependencies() {
+    $gum spin --spinner="dot" --title="Checking dependencies..." sleep 2$?
+    // Implemented later
+
+}
+
+main {
+
+    check_dependencies()?
+    let action = $gum choose "Create" "Delete" "Manage"$?
+
+
+    if {
+        action == "Create" {
+            create() failed {
+                echo "Error! Exiting."
+                $exit 1$?
+            }
+        }
+        action == "Delete" {
+            delete() failed {
+                echo "Error! Exiting."
+                $exit 1$?
+            }
+        }
+        action == "Manage" {
+            create() failed {
+                echo "Error! Exiting."
+                $exit 1$?
+            }
+        }
+    }
+}
